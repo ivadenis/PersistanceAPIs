@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1b459b13-3f91-4f51-8cb7-6c19d15d5df2" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Persistance APIs.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,7 +41,7 @@
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.35490605" vertical-offset="0" max-vertical-offset="479">
-              <caret line="10" column="2" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
+              <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -389,7 +388,15 @@
       <created>1405427178784</created>
       <updated>1405427178784</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Need to add libs">
+      <created>1405428917300</created>
+      <updated>1405428917300</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Added libs">
+      <created>1405428986808</created>
+      <updated>1405428986808</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -441,7 +448,9 @@
     <MESSAGE value="Adding jar" />
     <MESSAGE value="Hopefully ignoring workspace" />
     <MESSAGE value="Added library to project&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added library to project&#10;" />
+    <MESSAGE value="Need to add libs" />
+    <MESSAGE value="Added libs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added libs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -502,7 +511,7 @@
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.35490605" vertical-offset="0" max-vertical-offset="479">
-          <caret line="10" column="2" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
           <folding />
         </state>
       </provider>
