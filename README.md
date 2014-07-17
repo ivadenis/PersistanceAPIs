@@ -5,7 +5,7 @@ Class url: www.csulb.edu/~amonge/classes/swiss2014su/
 
 Team:
 ==============
-Christy
+Christy (eicher.christy@gmail.com)
 Ian
 Denis (ivadenis@gmail.com)
 Sarra
