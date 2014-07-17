@@ -183,7 +183,13 @@ public class JPADemo {
         retrieveTeamQuery.setParameter("name", teamName);
         List<Team> teams = retrieveTeamQuery.getResultList();
 
-        return teams == null || teams.isEmpty() ? null : teams.get(0).getRoster();
+
+        TypedQuery<Player> retrieveRosterQuery = em.createNamedQuery(Player.GET_BY_TEAM, Player.class);
+        retrieveRosterQuery.setParameter("team", teams.get(0).getId());
+        List<Player> players = null;
+        if(!(teams == null) && ! teams.isEmpty()) players = retrieveRosterQuery.getResultList();
+
+        return teams == null || teams.isEmpty() || players == null || players.isEmpty() ? null : players;
     }
 
     /**
@@ -211,7 +217,7 @@ public class JPADemo {
         
         System.out.println("Demo WARNING: This will delete players on the team you're about to delete!");
 
-        TypedQuery<Team> deleteStatement = em.createNamedQuery(Team.DELETE_BY_NAME, Team.class);
+        TypedQuery deleteStatement = em.createNamedQuery(Team.DELETE_BY_NAME, Team.class);
         deleteStatement.setParameter("name", teamName);
 
         em.getTransaction().begin();

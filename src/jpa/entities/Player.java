@@ -33,7 +33,8 @@ import javax.persistence.Transient;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name=Player.DELETE_ALL, query="DELETE FROM Player p")
+    @NamedQuery(name=Player.DELETE_ALL, query="DELETE FROM Player p"),
+    @NamedQuery(name=Player.GET_BY_TEAM, query="SELECT p FROM Player p WHERE p.team.id = :team")
 })
 public class Player implements Serializable {
     
@@ -41,6 +42,7 @@ public class Player implements Serializable {
      * JPQL query string to delete all players.
      */
     public static final String DELETE_ALL = "Player.delete_all";
+    public static final String GET_BY_TEAM = "Player.get_by_team";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
