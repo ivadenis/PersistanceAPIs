@@ -64,6 +64,7 @@ public class JPADemo {
             userInput = input.nextLine();
             processInput(demo, userInput);
         } while (! userInput.equalsIgnoreCase("quit"));
+        return;
     }
 
     /**
@@ -174,10 +175,6 @@ public class JPADemo {
      * Retrieves the players who are members of a team.
      * @param teamName The name of the team whose players is to be retrieved
      * @return a List of Players who are members of the named team, or an empty list.
-     * 
-     * TODO: Swiss SU Assignment -- Change this so that it uses a JPQL query to retrieve 
-     * players who are on the team. The JPQL query string should be defined in the Player class.
-     * 
      */
     private Collection<Player> getRoster(String teamName) {
         // TypedQuery provide strong type checking
