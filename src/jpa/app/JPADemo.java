@@ -96,7 +96,9 @@ public class JPADemo {
                 break;
             case "remove":
                 System.out.println("Demo of a remove operation");
-                demo.remove();
+                System.out.println("Enter the first name of the player to be removed.");
+                String name = input.nextLine();
+                demo.remove(name);
                 break;
             case "find":
                 System.out.println("Demo of a find operation");
@@ -196,13 +198,26 @@ public class JPADemo {
      * Removes a Player whose id (PK value) is known.
      * TODO: Swiss SU Assignment -- Modify this to take as parameter the name of player to be removed
      */
-    private void remove() { 
+    private void remove(String firstName) {
         em.getTransaction().begin();
-        Player player = em.find(Player.class, 5);
+
+        // DELETE DB ENTRY
+        Query query = em.createQuery(
+                "DELETE FROM Player WHERE first_name = ?0");
+        query.setParameter(0, firstName);
+        query.executeUpdate();
+
+        // GET ID
+        Query query2 = em.createQuery("SELECT id FROM Player WHERE first_name = ?0");
+        query2.setParameter(0, firstName);
+        int id = (Integer) query2.getSingleResult();
+
+        // DELETE OBJECT
+        Player player = em.find(Player.class, id);
+
         if (player != null) {
             System.out.println("Removing player from database: " + player.toString());
             em.remove(player);
-            theLogger.fine("CHECK DB... you'll see player w/ID 5 is removed");
         }
 
         em.getTransaction().commit(); // Before a commit, the remove was not guaranteed
