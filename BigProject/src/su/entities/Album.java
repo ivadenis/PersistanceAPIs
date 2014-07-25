@@ -25,7 +25,7 @@ public class Album {
     private Date releaseDate;
     //@Column(name = "Label")
     private String label;
-    @OneToMany(mappedBy = "album", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany(mappedBy = "album", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
     private Collection<Song> Songs;
 
 

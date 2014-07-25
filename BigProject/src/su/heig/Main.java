@@ -108,6 +108,7 @@ public class Main {
 
         // NOTE: Persisting a Player object without assigning a Team fails at run-time.
 
+        ALBUMS[0].addSong(new Song("Maniac","Electroswing",254));
 
         // Now they are all persisted... even players due to the CascadeType (see relationship defined in Team.java)
         em.getTransaction().commit();
