@@ -6,6 +6,8 @@ import su.entities.Song;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
@@ -25,7 +27,7 @@ public class Main {
 
     public static final Scanner input = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         Main demo = new Main();
         demo.loadDatabase();
 
@@ -38,7 +40,7 @@ public class Main {
         return;
     }
 
-    public static void processInput(Main demo, String userInput) {
+    public static void processInput(Main demo, String userInput) throws ParseException {
         String teamName;
 
         switch (userInput.toLowerCase()) {
@@ -60,6 +62,19 @@ public class Main {
 
                 demo.addSongToAlbum(album,new Song(sn, sg, dur));
 
+                break;
+            case "addalbum":
+            case "aa":
+                System.out.print("Album title: ");
+                String title = input.nextLine();
+                System.out.print("Album date: ");
+                Date d = new Date(new SimpleDateFormat("M d y").parse(input.nextLine()).getTime());
+                System.out.print("Album label: ");
+                String l = input.nextLine();
+
+                em.getTransaction().begin();
+                em.persist(new Album(title,d,l));
+                em.getTransaction().commit();
                 break;
             case "list":
             case "l":
