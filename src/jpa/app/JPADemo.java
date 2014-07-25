@@ -314,6 +314,4 @@ public class JPADemo {
         "Demo of executing a JPQL statement to delete a team from the DB",
         "Quit this program"
     };
-
-    
 }
