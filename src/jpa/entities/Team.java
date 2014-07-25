@@ -24,12 +24,12 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 //import org.eclipse.persistence.annotations.CascadeOnDelete;
 
-@NamedQueries({
-    @NamedQuery(name = Team.GET_BY_NAME, query = "SELECT t FROM Team t WHERE t.teamName = :name"),
-    @NamedQuery(name = Team.DELETE_BY_NAME, query = "DELETE FROM Team t WHERE t.teamName = :name"),
-    @NamedQuery(name = Team.DELETE_ALL, query = "DELETE FROM Team t")
-    // NOTE: While tempting... this does not work b/c JPQL SELECT clause must specify only single-valued expressions:
-    // @NamedQuery(name = Team.GET_BY_NAME, query = "SELECT t.roster FROM Team t WHERE t.teamName = :name"),
+@NamedQueries(value = {
+        @NamedQuery(name = Team.GET_BY_NAME, query = "SELECT t FROM Team t WHERE t.teamName = :name"),
+        @NamedQuery(name = Team.DELETE_BY_NAME, query = "DELETE FROM Team t WHERE t.teamName = :name"),
+        @NamedQuery(name = Team.DELETE_ALL, query = "DELETE FROM Team t")
+        // NOTE: While tempting... this does not work b/c JPQL SELECT clause must specify only single-valued expressions:
+        // @NamedQuery(name = Team.GET_BY_NAME, query = "SELECT t.roster FROM Team t WHERE t.teamName = :name"),
 })
 @Entity
 public class Team implements Serializable {
