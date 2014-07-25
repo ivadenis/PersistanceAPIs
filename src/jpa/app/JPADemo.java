@@ -15,7 +15,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import javax.persistence.*;
 import jpa.entities.Player;
 import jpa.entities.Team;
@@ -177,13 +176,13 @@ public class JPADemo {
      * @return a List of Players who are members of the named team, or an empty list.
      */
     private Collection<Player> getRoster(String teamName) {
-        // TypedQuery provide strong type checking
-        TypedQuery<Team> retrieveTeamQuery = em.createNamedQuery(Team.GET_BY_NAME, Team.class);
+        // Query provide strong type checking
+        Query retrieveTeamQuery = em.createNamedQuery(Team.GET_BY_NAME, Team.class);
         retrieveTeamQuery.setParameter("name", teamName);
         List<Team> teams = retrieveTeamQuery.getResultList();
 
 
-        TypedQuery<Player> retrieveRosterQuery = em.createNamedQuery(Player.GET_BY_TEAM, Player.class);
+        Query retrieveRosterQuery = em.createNamedQuery(Player.GET_BY_TEAM, Player.class);
         retrieveRosterQuery.setParameter("team", teams.get(0).getId());
         List<Player> players = null;
         if(!(teams == null) && ! teams.isEmpty()) players = retrieveRosterQuery.getResultList();
@@ -193,21 +192,20 @@ public class JPADemo {
 
     /**
      * Removes a Player whose id (PK value) is known.
-     * TODO: Swiss SU Assignment -- Modify this to take as parameter the name of player to be removed
      */
     private void remove(String firstName) {
         em.getTransaction().begin();
+
+        // GET ID
+        Query query2 = em.createQuery("SELECT id FROM Player WHERE first_name = ?0");
+        query2.setParameter(0, firstName);
+        int id = (Integer) query2.getSingleResult();
 
         // DELETE DB ENTRY
         Query query = em.createQuery(
                 "DELETE FROM Player WHERE first_name = ?0");
         query.setParameter(0, firstName);
         query.executeUpdate();
-
-        // GET ID
-        Query query2 = em.createQuery("SELECT id FROM Player WHERE first_name = ?0");
-        query2.setParameter(0, firstName);
-        int id = (Integer) query2.getSingleResult();
 
         // DELETE OBJECT
         Player player = em.find(Player.class, id);
@@ -229,7 +227,7 @@ public class JPADemo {
         
         System.out.println("Demo WARNING: This will delete players on the team you're about to delete!");
 
-        TypedQuery deleteStatement = em.createNamedQuery(Team.DELETE_BY_NAME, Team.class);
+        Query deleteStatement = em.createQuery("DELETE FROM Team t WHERE t.teamName = :name");
         deleteStatement.setParameter("name", teamName);
 
         em.getTransaction().begin();
@@ -240,6 +238,10 @@ public class JPADemo {
         /**
          * TODO: Swiss SU Assignment -- Try deleting Teams with and without Players! Check the database before and after you 
          * test this method. Explain what happens in each case.
+         *
+         * When deleting teams with players, the database throws an exception, complaining about foreign constraints.
+         * When deleting teams without players, it works like a charm! The program successfully removes the team
+         * from the database.
          */
     }
 
