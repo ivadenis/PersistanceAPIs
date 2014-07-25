@@ -54,14 +54,14 @@ public class JPADemo {
      * A menu-driven program giving user options of executing sample functions on the persistent data
      * @param args no arguments are used
      */
-    public static void main(String[] args) {
-        JPADemo demo = new JPADemo();
-        demo.loadDatabase();
+   public static void main(String[] args) {
+            JPADemo demo = new JPADemo();
+            demo.loadDatabase();
 
-        String userInput;
-        do {
-            displayMenu();
-            userInput = input.nextLine();
+            String userInput;
+            do {
+                displayMenu();
+                userInput = input.nextLine();
             processInput(demo, userInput);
         } while (! userInput.equalsIgnoreCase("quit"));
         return;

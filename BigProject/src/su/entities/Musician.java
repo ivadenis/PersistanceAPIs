@@ -1,7 +1,7 @@
 package su.entities;
 
 import javax.persistence.*;
-import su.heig.Album;
+import su.entities.Album;
 
 /**
  * Created by Christy on 24 July 2014
@@ -14,8 +14,8 @@ public class Musician {
     private Integer id;
     @Column(name = "Name")
     private String name;
-    @ManyToMany
-    private Album album;
+   // @ManyToMany
+   // private Album album;
 
     public Musician(String name) {
         this.name = name;

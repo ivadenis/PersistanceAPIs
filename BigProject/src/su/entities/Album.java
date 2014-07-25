@@ -14,16 +14,16 @@ public class Album {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "Album Title")
+    //@Column(name = "Album Title")
     private String albumTitle;
-    @Column(name = "Release Date")
+    //@Column(name = "Release Date")
     private Date releaseDate;
-    @Column(name = "Label")
+    //@Column(name = "Label")
     private String label;
-    @OneToMany
-    private Song song;
-    @ManyToMany
-    private Musician musician;
+   // @OneToMany
+   // private Song song;
+    //@ManyToMany
+    //private Musician musician;
 
     public Album(String albumTitle, Date releaseDate, String label) {
         this.albumTitle = albumTitle;

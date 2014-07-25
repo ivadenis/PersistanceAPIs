@@ -12,16 +12,16 @@ public class Song {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "Title")
+    //@Column(name = "Title")
     private String songTitle;
-    @Column(name = "Genre")
+    //@Column(name = "Genre")
     private String genre;
-    @Column(name = "Duration")
+    //@Column(name = "Duration")
     private int songLength;
-    @Column(name = "Album ID")
+    //@Column(name = "Album ID")
     private int albumId;
-    @ManyToOne
-    private Album album;
+    //@ManyToOne
+    //private Album album;
 
     public Song(String songTitle, String genre, int songLength, int albumId) {
         this.songTitle = songTitle;
