@@ -4,10 +4,7 @@ import su.entities.Album;
 import su.entities.Musician;
 import su.entities.Song;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.List;
@@ -49,6 +46,11 @@ public class Main {
             case "as":
                 System.out.print("Album: ");
                 String a = input.nextLine();
+                Album album = demo.findAlbum(a);
+                if(album == null) {
+                    System.out.println("Album does not exist.");
+                    break;
+                }
                 System.out.print("Song name: ");
                 String sn = input.nextLine();
                 System.out.print("Song duration: ");
@@ -56,7 +58,7 @@ public class Main {
                 System.out.print("Song genre: ");
                 String sg = input.nextLine();
 
-                demo.addSongToAlbum(demo.ALBUMS[0],new Song(sn, sg, dur));
+                demo.addSongToAlbum(album,new Song(sn, sg, dur));
 
                 break;
             case "list":
@@ -67,6 +69,14 @@ public class Main {
                 if(! userInput.equalsIgnoreCase("quit")) System.out.println("Invalid choice, try again");
         }
 
+    }
+
+    private Album findAlbum(String title) {
+        Query retrieveTeamQuery = em.createNamedQuery(Album.GET_BY_TITLE, Album.class);
+        retrieveTeamQuery.setParameter("title", title);
+        List<Album> albums = retrieveTeamQuery.getResultList();
+
+        return albums == null || albums.isEmpty() ? null : albums.get(0);
     }
 
     private void addSongToAlbum(Album a, Song s) {
@@ -170,13 +180,14 @@ public class Main {
     };
 
 
-    private static final String MENU_CHOICES[] = {"list", "quit"};
+    private static final String MENU_CHOICES[] = {"list (l)", "addsong (as)", "quit"};
 
     /**
      * Descriptions of the menu choices
      */
     private static final String CHOICE_SUMMARIES[] = {
             "List albums",
+            "Add song to album",
             "Quit this program"
     };
 

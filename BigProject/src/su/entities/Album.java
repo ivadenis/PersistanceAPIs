@@ -13,8 +13,16 @@ import su.entities.Musician;
 /**
  * Created by Christy on 24 July 2014
  */
+
+@NamedQueries(value = {
+        @NamedQuery(name = Album.GET_BY_TITLE, query = "SELECT a FROM Album a WHERE a.albumTitle = :title"),
+})
+
+
 @Entity
 public class Album {
+
+    public static final String GET_BY_TITLE = "Album.get_by_title";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
