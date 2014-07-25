@@ -3,6 +3,8 @@ package su.entities;
 import javax.persistence.*;
 import su.entities.Album;
 
+import java.util.List;
+
 /**
  * Created by Christy on 24 July 2014
  */
@@ -16,6 +18,9 @@ public class Musician {
     private String name;
    // @ManyToMany
    // private Album album;
+
+    @ManyToMany(mappedBy="Musicians")
+    private List<Album> Albums;
 
     public Musician(String name) {
         this.name = name;

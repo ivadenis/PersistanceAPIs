@@ -2,6 +2,11 @@ package su.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+
 import su.entities.Song;
 import su.entities.Musician;
 
@@ -20,8 +25,17 @@ public class Album {
     private Date releaseDate;
     //@Column(name = "Label")
     private String label;
-   // @OneToMany
-   // private Song song;
+    @OneToMany(mappedBy = "album", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private Collection<Song> Songs;
+
+
+    @ManyToMany
+    @JoinTable(
+            name="album_musician",
+            joinColumns={@JoinColumn(name="album_id", referencedColumnName="id")},
+            inverseJoinColumns={@JoinColumn(name="musician_id", referencedColumnName="id")})
+    private List<Musician> Musicians;
+
     //@ManyToMany
     //private Musician musician;
 
@@ -29,6 +43,8 @@ public class Album {
         this.albumTitle = albumTitle;
         this.releaseDate = releaseDate;
         this.label = label;
+        Songs = new HashSet<>();
+        Musicians = new ArrayList<Musician>();
     }
 
     public Integer getId() {
@@ -61,6 +77,18 @@ public class Album {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public void addSong(Song song) {
+        Songs.add(song);
+        if (song.getAlbum() != this) {
+            song.setAlbum(this);
+        }
+    }
+
+    public void addMusician(Musician m) {
+        Musicians.add(m);
+
     }
 
     @Override

@@ -1,8 +1,13 @@
 package su.heig;
 
+import su.entities.Album;
+import su.entities.Musician;
+import su.entities.Song;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.sql.Date;
 import java.util.logging.Logger;
 
 /**
@@ -48,8 +53,21 @@ public class Main {
 
 
         // NOTE: Persisting a Player object without assigning a Team fails at run-time.
-//        Player pete = new Player("Nick", "Young", 29, "Swaggy P");
-//        em.persist(pete);
+        Musician pete = new Musician("Pete");
+        em.persist(pete);
+
+        Musician joe = new Musician("Joe");
+        em.persist(joe);
+
+
+
+        Album Panic = new Album("Panic",new Date(112,2,20),"Some guy");
+
+        Panic.addMusician(pete);
+        Panic.addMusician(joe);
+
+        Panic.addSong(new Song("Clash","Electroswing",254));
+        em.persist(Panic);
 
         // Now they are all persisted... even players due to the CascadeType (see relationship defined in Team.java)
         em.getTransaction().commit();

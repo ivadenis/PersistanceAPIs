@@ -19,14 +19,22 @@ public class Song {
     //@Column(name = "Duration")
     private int songLength;
     //@Column(name = "Album ID")
-    private int albumId;
-    //@ManyToOne
-    //private Album album;
+    @ManyToOne
+    private Album album;
 
-    public Song(String songTitle, String genre, int songLength, int albumId) {
+    public Album getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
+
+    public Song(String songTitle, String genre, int songLength) {
         this.songTitle = songTitle;
         this.genre = genre;
         this.songLength = songLength;
+        this.album = null;
     }
 
     public Integer getId() {
@@ -35,14 +43,6 @@ public class Song {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public int getAlbumId() {
-        return albumId;
-    }
-
-    public void setAlbumId(int albumId) {
-        this.albumId = albumId;
     }
 
     public String getSongTitle() {
@@ -73,7 +73,6 @@ public class Song {
     public String toString(){
         return "Song Title: " + songTitle + "/n" +
                 "Genre: " + genre + "/n" +
-                "Song Length " + songLength + "/n" +
-                "Ref. Album ID: " + albumId;
+                "Song Length " + songLength + "/n";
     }
 }
