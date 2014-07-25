@@ -45,6 +45,20 @@ public class Main {
         String teamName;
 
         switch (userInput.toLowerCase()) {
+            case "addsong":
+            case "as":
+                System.out.print("Album: ");
+                String a = input.nextLine();
+                System.out.print("Song name: ");
+                String sn = input.nextLine();
+                System.out.print("Song duration: ");
+                int dur = Integer.parseInt(input.nextLine());
+                System.out.print("Song genre: ");
+                String sg = input.nextLine();
+
+                demo.addSongToAlbum(demo.ALBUMS[0],new Song(sn, sg, dur));
+
+                break;
             case "list":
             case "l":
                 demo.listAlbums();
@@ -53,6 +67,18 @@ public class Main {
                 if(! userInput.equalsIgnoreCase("quit")) System.out.println("Invalid choice, try again");
         }
 
+    }
+
+    private void addSongToAlbum(Album a, Song s) {
+        em.getTransaction().begin();
+
+        em.persist(s);
+
+        a.addSong(s);
+
+        em.merge(a);
+
+        em.getTransaction().commit();
     }
 
     private void listAlbums() {
@@ -108,7 +134,12 @@ public class Main {
 
         // NOTE: Persisting a Player object without assigning a Team fails at run-time.
 
-        ALBUMS[0].addSong(new Song("Maniac","Electroswing",254));
+        //ALBUMS[0] = new Album("Panic",new Date(112,2,20),"Some guy");
+
+        Song s = new Song("Maniac","Electroswing",254);
+        ALBUMS[0].addSong(s);
+        em.persist(s);
+        em.merge(ALBUMS[0]);
 
         // Now they are all persisted... even players due to the CascadeType (see relationship defined in Team.java)
         em.getTransaction().commit();
