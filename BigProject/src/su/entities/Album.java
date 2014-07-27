@@ -7,19 +7,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import su.entities.Song;
-import su.entities.Musician;
-
 /**
  * Created by Christy on 24 July 2014
  */
-
+@Entity
 @NamedQueries(value = {
         @NamedQuery(name = Album.GET_BY_TITLE, query = "SELECT a FROM Album a WHERE a.albumTitle = :title"),
 })
-
-
-@Entity
 public class Album {
 
     public static final String GET_BY_TITLE = "Album.get_by_title";
@@ -27,11 +21,8 @@ public class Album {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    //@Column(name = "Album Title")
     private String albumTitle;
-    //@Column(name = "Release Date")
     private Date releaseDate;
-    //@Column(name = "Label")
     private String label;
     @OneToMany(mappedBy = "album", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
     private Collection<Song> Songs;
@@ -43,9 +34,6 @@ public class Album {
             joinColumns={@JoinColumn(name="album_id", referencedColumnName="id")},
             inverseJoinColumns={@JoinColumn(name="musician_id", referencedColumnName="id")})
     private List<Musician> Musicians;
-
-    //@ManyToMany
-    //private Musician musician;
 
     public Album(String albumTitle, Date releaseDate, String label) {
         this.albumTitle = albumTitle;
@@ -87,6 +75,22 @@ public class Album {
         this.label = label;
     }
 
+    public Collection<Song> getSongs() {
+        return Songs;
+    }
+
+    public void setSongs(Collection<Song> songs) {
+        Songs = songs;
+    }
+
+    public List<Musician> getMusicians() {
+        return Musicians;
+    }
+
+    public void setMusicians(List<Musician> musicians) {
+        Musicians = musicians;
+    }
+
     public void addSong(Song song) {
         Songs.add(song);
         if (song.getAlbum() != this) {
@@ -96,14 +100,12 @@ public class Album {
 
     public void addMusician(Musician m) {
         Musicians.add(m);
-
     }
 
     @Override
     public String toString(){
-        return "ID: " + id + "/n" +
-                "Album Title: " + albumTitle + "/n" +
-                "Release Date: " + releaseDate + "/n" +
-                "Label: " + label;
+        return  "Album Title: " + albumTitle + "\n" +
+                "   Release Date: " + releaseDate + "\n" +
+                "   Label: " + label;
     }
 }
