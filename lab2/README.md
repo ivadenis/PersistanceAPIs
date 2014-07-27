@@ -1,0 +1,6 @@
+Work in the sames teams as the JPA assignment.
+
+1. Complete the instructions provided by the article Create Your Own To-Do App with HTML5 and IndexedDB
+2. Run the application, creating several items. You'll need these for the next part.
+3. Create another version of the database and extend the To-Do App to include items that have one new field, a category which is a way to organize the To-Do items. You'll need to change the web page to allow a user to specify values for this field, and you'll need to upgrade the database so it can store these new objects. The category is also a required value. Be sure to copy any items from a previous version of the database that lacked this field; in that case, use "unknown" as the value for the category.
+4. Create an index that allows looking up to-do items by allowing a user to specify a value for the category. If no value is specified, then you need to show all items. Otherwise, if the user provides a value such as "friends and family", then you must show only the items in that category, if any.

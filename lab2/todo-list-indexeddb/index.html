@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Todo List App</title>
+
+  <link rel="stylesheet" href="style.css">
+  <script type="text/javascript" src="underscore-min.js"></script>
+
+</head>
+<body>
+  <div id="page-wrapper">
+    <select name="categories" id="categories"></select>
+    <!-- Form for new Todo Items -->
+    <form id="new-todo-form" method="POST" action="#">
+      <input type="text" name="new-todo" id="new-todo" placeholder="Enter a todo item..." required>
+      <input type="text" name="category" id="new-category" placeholder="Enter category..." required>
+      <!-- <select id="new-category" multiple placeholder="Enter category..."></select> -->
+      <button type="submit">Submit</button>
+    </form>
+  
+    <!-- Todo Item List -->
+    <ul id="todo-items"></ul>
+  </div>
+
+  <script src="db.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
