@@ -1,7 +1,7 @@
 .idea/**
 .idea/workspace.xml
 ./.idea/workspace.xml
-
+.idea
 
 *.class
 *.DS_Store
