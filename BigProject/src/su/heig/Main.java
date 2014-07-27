@@ -38,6 +38,9 @@ public class Main {
             userInput = input.nextLine();
             processInput(demo, userInput);
         } while (! userInput.equalsIgnoreCase("quit"));
+
+        emf.close();
+
         return;
     }
 
@@ -130,7 +133,7 @@ public class Main {
                 break;
             case "listsongsbyalbum":
             case "lsa":
-                System.out.println("Album: ");
+                System.out.print("Album: ");
                 String albTitle = input.nextLine();
                 Album alb = demo.findAlbum(albTitle);
                 demo.listSongs(alb);
@@ -310,7 +313,7 @@ public class Main {
 
     private static final String MENU_CHOICES[] = {"LIST", "   listalbums (la)", "   listmusicians (lm)",
             "   listallsongs (las)", "   listsongsbyalbum (lsa)", "ADD",
-            "   addsong (as)", "   addmusicianalbum (ama)", "QUIT"};
+            "   addsong (as)", "   addmusicianalbum (ama)", "   addalbum (aa)", "QUIT"};
 
     /**
      * Descriptions of the menu choices
@@ -324,6 +327,7 @@ public class Main {
             "",
             "Add song to album",
             "Add a new or existing musician to a new or existing album",
+            "Add a new album",
             "Quit this program"
     };
 }
