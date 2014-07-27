@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -16,6 +15,8 @@ import java.util.logging.Logger;
 /**
  * Created by Ian on 7/22/2014.
  * Modified by Ian on 7/25/2014
+ * Modified by Christy on 7/26/2014
+ * Modified by Christy on 7/27/2014
  */
 public class Main {
 
@@ -37,15 +38,10 @@ public class Main {
             userInput = input.nextLine();
             processInput(demo, userInput);
         } while (! userInput.equalsIgnoreCase("quit"));
-
-        emf.close();
-
         return;
     }
 
     public static void processInput(Main demo, String userInput) throws ParseException {
-        String teamName;
-
         switch (userInput.toLowerCase()) {
             case "addsong":
             case "as":
@@ -62,37 +58,86 @@ public class Main {
                 int dur = Integer.parseInt(input.nextLine());
                 System.out.print("Song genre: ");
                 String sg = input.nextLine();
-
                 demo.addSongToAlbum(album,new Song(sn, sg, dur));
-
                 break;
             case "addalbum":
             case "aa":
                 System.out.print("Album title: ");
                 String title = input.nextLine();
-                System.out.print("Album date(M D Y): ");
+                System.out.print("Album date: ");
                 Date d = new Date(new SimpleDateFormat("M d y").parse(input.nextLine()).getTime());
                 System.out.print("Album label: ");
                 String l = input.nextLine();
-
                 em.getTransaction().begin();
                 em.persist(new Album(title,d,l));
                 em.getTransaction().commit();
                 break;
-            case "albuminfo":
-            case "ai":
-                System.out.print("Album title: ");
-                String atitle = input.nextLine();
-                demo.albumInfo(atitle);
-                break;
-            case "list":
-            case "l":
+            case "listalbums":
+            case "la":
                 demo.listAlbums();
+                break;
+            case "listmusicians":
+            case "lm":
+                demo.listMusicians();
+                break;
+            case "addmusicianalbum":
+            case "ama":
+                System.out.print("Musician Name: ");
+                boolean bool = false;
+                String name = input.nextLine();
+                // Making two separate objects, because otherwise it gets confused
+                Musician existingMus = demo.findMusician(name);
+                Musician newMus = new Musician("");
+                if(existingMus == null) {
+                    // ADD THE MUSICIAN
+                    bool = true; // set flag
+                    newMus = new Musician(name);
+                    em.getTransaction().begin();
+                    em.persist(newMus);
+                    em.getTransaction().commit();
+                    System.out.println("This musician is not yet stored. He/She has just been added!");
+                }
+                System.out.print("Album title: ");
+                String albumName = input.nextLine();
+                Album existingAlb = demo.findAlbum(albumName);
+                if(existingAlb == null){
+                    // ADD THE ALBUM AND THEN THE MUSICIAN
+                    System.out.println("This album is not yet stored. Please enter the following info to store it.");
+                    System.out.print("Album date: ");
+                    Date date = new Date(new SimpleDateFormat("M d y").parse(input.nextLine()).getTime());
+                    System.out.print("Album label: ");
+                    String label = input.nextLine();
+                    Album newAlb = new Album(albumName,date,label);
+                    em.getTransaction().begin();
+                    em.persist(newAlb);
+                    em.getTransaction().commit();
+                    if (bool)
+                        newAlb.addMusician(newMus);
+                    else newAlb.addMusician(existingMus);
+                }
+                else{
+                    // ADD THE MUSICIAN TO THE EXISTING ALBUM
+                    if (bool) {
+                        existingAlb.addMusician(newMus);
+                    }
+                    else existingAlb.addMusician(existingMus);
+                }
+                System.out.println("Musician added to album!");
+                break;
+            case "listallsongs":
+            case "las":
+                demo.listSongs();
+                break;
+            case "listsongsbyalbum":
+            case "lsa":
+                System.out.println("Album: ");
+                String albTitle = input.nextLine();
+                Album alb = demo.findAlbum(albTitle);
+                demo.listSongs(alb);
                 break;
             default:
                 if(! userInput.equalsIgnoreCase("quit")) System.out.println("Invalid choice, try again");
         }
-
     }
 
     private Album findAlbum(String title) {
@@ -103,23 +148,12 @@ public class Main {
         return albums == null || albums.isEmpty() ? null : albums.get(0);
     }
 
-    private void albumInfo(String title) {
-        Album a = findAlbum(title);
+    private Musician findMusician(String name) {
+        Query retrieveTeamQuery = em.createNamedQuery(Musician.GET_BY_NAME, Musician.class);
+        retrieveTeamQuery.setParameter("name", name);
+        List<Musician> muses = retrieveTeamQuery.getResultList();
 
-        if(!a.getMusicians().isEmpty()) {
-            System.out.println("Musicians:");
-            for (Musician m : a.getMusicians()) {
-                System.out.println(m.getName());
-            }
-        }
-        if(!a.getSongs().isEmpty()) {
-            System.out.println("Songs:");
-
-            for(Song s : a.getSongs()) {
-                System.out.println(s);
-            }
-        }
-
+        return muses == null || muses.isEmpty() ? null : muses.get(0);
     }
 
     private void addSongToAlbum(Album a, Song s) {
@@ -136,27 +170,79 @@ public class Main {
 
     private void listAlbums() {
         // Create the EntityManager
-        boolean playerFound = true;
+        boolean albumFound = true;
 
-        // em.find() requires the PK value by which an entity can be found
-        // In the demo below, since we know PK values are auto generated
-        // starting at 1, we attempt to find the first 10 players.
-        System.out.println("The first players inserted in the database...");
-        for (int primaryKey = 1; primaryKey <= 10 && playerFound; primaryKey++) {
-            Album player = em.find(Album.class, primaryKey);
-            if (player != null) {
-                System.out.println(player);
+        System.out.println("----------ALBUMS----------");
+        for (int primaryKey = 1; primaryKey <= 10 && albumFound; primaryKey++) {
+            Album album = em.find(Album.class, primaryKey);
+            if (album != null) {
+                System.out.println(album);
+                if (album.getMusicians().size() > 0){
+                    System.out.println("   Musicians:");
+                    for (Musician musician : album.getMusicians())
+                        System.out.println("      " + musician.getName());
+                }
             } else {
-                playerFound = false;
+                albumFound = false;
             }
         }
+        System.out.println("--------------------------");
+    }
+
+    public void listMusicians(){
+        // Create the EntityManager
+        boolean musicianFound = true;
+        boolean albumFound = true;
+
+        System.out.println("--------MUSICIANS---------");
+        for (int primaryKey = 1; primaryKey <= 10 && musicianFound; primaryKey++) {
+            Musician mus = em.find(Musician.class, primaryKey);
+            if (mus != null) {
+                System.out.println(mus.getName());
+                Album album = em.find(Album.class, primaryKey);
+                if (album != null) {
+                    System.out.println("   Album(s): ");
+                    System.out.println("   " + album.getAlbumTitle());
+                } else {
+                    albumFound = false;
+                }
+            } else {
+                musicianFound = false;
+            }
+        }
+        System.out.println("--------------------------");
+    }
+
+    public void listSongs(){
+        // Create the EntityManager
+        boolean songFound = true;
+
+        System.out.println("----------SONGS-----------");
+        for (int primaryKey = 1; primaryKey <= 10 && songFound; primaryKey++) {
+            Song song = em.find(Song.class, primaryKey);
+            if (song != null) {
+                System.out.println(song);
+            } else {
+                songFound = false;
+            }
+        }
+        System.out.println("--------------------------");
+    }
+
+    public void listSongs(Album alb){
+        if (alb.getSongs().size() > 0)
+            for (Song song : alb.getSongs())
+                System.out.println(song.toString());
+        else System.out.println("  No songs added.");
     }
 
     public static void displayMenu() {
         System.out.println();
+        System.out.println("-----------MENU-----------");
         for (int i = 0; i < MENU_CHOICES.length; i++) {
             System.out.println(MENU_CHOICES[i] + ": " + CHOICE_SUMMARIES[i]);
         }
+        System.out.println("--------------------------");
         System.out.print("\tYour choice> ");
     }
 
@@ -178,10 +264,6 @@ public class Main {
 
             for (Song s : SONGS[i]) {
                 a.addSong(s);
-            }
-
-            for (Musician m : MUSICIANS) {
-                a.addMusician(m);
             }
 
             em.persist(a);
@@ -209,8 +291,8 @@ public class Main {
     };
 
     Album ALBUMS[] = {
-        new Album("Panic",new Date(112,2,20),"Some guy"),
-        new Album("Caravan Palace",new Date(110,2,20),"Some guy")
+            new Album("Panic",new Date(112,2,20),"Some guy"),
+            new Album("Caravan Palace",new Date(110,2,20),"Some guy")
     };
 
     Song SONGS[][] = {
@@ -226,18 +308,22 @@ public class Main {
             }
     };
 
-
-    private static final String MENU_CHOICES[] = {"list (l)", "addalbum (aa)", "addsong (as)", "albuminfo (ai)", "quit"};
+    private static final String MENU_CHOICES[] = {"LIST", "   listalbums (la)", "   listmusicians (lm)",
+            "   listallsongs (las)", "   listsongsbyalbum (lsa)", "ADD",
+            "   addsong (as)", "   addmusicianalbum (ama)", "QUIT"};
 
     /**
      * Descriptions of the menu choices
      */
     private static final String CHOICE_SUMMARIES[] = {
+            "",
             "List albums",
-            "Add album",
+            "List musicians",
+            "List all songs",
+            "List songs by album",
+            "",
             "Add song to album",
-            "Get album info",
+            "Add a new or existing musician to a new or existing album",
             "Quit this program"
     };
-
 }
