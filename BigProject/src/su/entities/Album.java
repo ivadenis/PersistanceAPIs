@@ -99,11 +99,19 @@ public class Album {
 
     }
 
+    public Collection<Song> getSongs() {
+        return Songs;
+    }
+
+    public List<Musician> getMusicians() {
+        return Musicians;
+    }
+
     @Override
     public String toString(){
-        return "ID: " + id + "/n" +
-                "Album Title: " + albumTitle + "/n" +
-                "Release Date: " + releaseDate + "/n" +
+        return "ID: " + id + "\n" +
+                "Album Title: " + albumTitle + "\n" +
+                "Release Date: " + releaseDate + "\n" +
                 "Label: " + label;
     }
 }

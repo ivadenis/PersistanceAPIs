@@ -71,8 +71,8 @@ public class Song {
 
     @Override
     public String toString(){
-        return "Song Title: " + songTitle + "/n" +
-                "Genre: " + genre + "/n" +
-                "Song Length " + songLength + "/n";
+        return "Song Title: " + songTitle + " - " +
+                "Genre: " + genre + " - " +
+                "Song Length " + songLength + "s";
     }
 }

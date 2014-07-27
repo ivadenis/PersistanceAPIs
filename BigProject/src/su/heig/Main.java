@@ -37,6 +37,9 @@ public class Main {
             userInput = input.nextLine();
             processInput(demo, userInput);
         } while (! userInput.equalsIgnoreCase("quit"));
+
+        emf.close();
+
         return;
     }
 
@@ -67,7 +70,7 @@ public class Main {
             case "aa":
                 System.out.print("Album title: ");
                 String title = input.nextLine();
-                System.out.print("Album date: ");
+                System.out.print("Album date(M D Y): ");
                 Date d = new Date(new SimpleDateFormat("M d y").parse(input.nextLine()).getTime());
                 System.out.print("Album label: ");
                 String l = input.nextLine();
@@ -75,6 +78,12 @@ public class Main {
                 em.getTransaction().begin();
                 em.persist(new Album(title,d,l));
                 em.getTransaction().commit();
+                break;
+            case "albuminfo":
+            case "ai":
+                System.out.print("Album title: ");
+                String atitle = input.nextLine();
+                demo.albumInfo(atitle);
                 break;
             case "list":
             case "l":
@@ -92,6 +101,25 @@ public class Main {
         List<Album> albums = retrieveTeamQuery.getResultList();
 
         return albums == null || albums.isEmpty() ? null : albums.get(0);
+    }
+
+    private void albumInfo(String title) {
+        Album a = findAlbum(title);
+
+        if(!a.getMusicians().isEmpty()) {
+            System.out.println("Musicians:");
+            for (Musician m : a.getMusicians()) {
+                System.out.println(m.getName());
+            }
+        }
+        if(!a.getSongs().isEmpty()) {
+            System.out.println("Songs:");
+
+            for(Song s : a.getSongs()) {
+                System.out.println(s);
+            }
+        }
+
     }
 
     private void addSongToAlbum(Album a, Song s) {
@@ -152,6 +180,10 @@ public class Main {
                 a.addSong(s);
             }
 
+            for (Musician m : MUSICIANS) {
+                a.addMusician(m);
+            }
+
             em.persist(a);
             i++;
         }
@@ -195,14 +227,16 @@ public class Main {
     };
 
 
-    private static final String MENU_CHOICES[] = {"list (l)", "addsong (as)", "quit"};
+    private static final String MENU_CHOICES[] = {"list (l)", "addalbum (aa)", "addsong (as)", "albuminfo (ai)", "quit"};
 
     /**
      * Descriptions of the menu choices
      */
     private static final String CHOICE_SUMMARIES[] = {
             "List albums",
+            "Add album",
             "Add song to album",
+            "Get album info",
             "Quit this program"
     };
 
